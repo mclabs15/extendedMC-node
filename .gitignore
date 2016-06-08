@@ -1,0 +1,12 @@
+node_modules
+debug
+logs
+world
+banned-ips.json
+banned-players.json
+eula.txt
+ops.json
+*.jar
+*.properties
+usercache.json
+whitelist.json
