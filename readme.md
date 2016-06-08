@@ -81,3 +81,28 @@ Triggering the chain should output:
         this is the 8th time!
         this is the 9th time!
         this is the 10th time!
+
+###savedata
+Usage: savedata [X] [Y] [Z] [selector]
+
+The savedata command will obtain the name and UUID of the entity specified with the selector. This command requires an anchor sign block to save the data to. Place a sign block somewhere, and use its coordinates as the xyz parameters. (this is required because JSON selectors cannot be outputted directly to the console.)
+
+####(Note: the selector will run from the coordinates of the sign)
+
+Example:
+
+        <CMD>savedata 23 106 49 @e[c=1]</CMD>
+
+###loaddata
+Usage: loaddata [X] [Y] [Z]
+
+This command will save the data saved with savedata to variables on the server. Use the same XYZ coordinates as the savedata sign.
+
+###phead
+Usage: phead [selector]
+
+This command will create a player skull with its SkullOwner tag set to the name saved to the server via loaddata. This skull will be given to the player(s) spacified.
+
+Example:
+  
+        <CMD>phead Steve</CMD>
