@@ -40,3 +40,10 @@ in a console set to your server directory, or running "run.bat".
 ##Commands
 
 (Note: these commands are very incomplete, and are unfinished. They may change at any time.)
+
+###Syntax
+
+The program will parse custom commands in the minecraft console which are wrapped with <CMD> and </CMD>. It will not accept a command from a player using it in a chat message, in order to prevent it from being exploited. However, one way to trigger a custom command via chat is to type
+
+        /say <CMD>your command here</CMD>
+
