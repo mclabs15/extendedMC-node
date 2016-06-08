@@ -43,11 +43,11 @@ in a console set to your server directory, or running "run.bat".
 
 ###Syntax
 
-The program will parse custom commands in the minecraft console which are wrapped with <CMD> and </CMD>. It will not accept a command from a player using it in a chat message, in order to prevent it from being exploited. However, one way to trigger a custom command via chat is to type
+The program will parse custom commands in the minecraft console which are wrapped with \<CMD> and \</CMD>. It will not accept a command from a player using it in a chat message, in order to prevent it from being exploited. However, one way to trigger a custom command via chat is to type
 
         /say <CMD>your command here</CMD>
 
-Any text that is printed to the console which contains <CMD> and then </CMD> will be parsed and checked for validity.
+Any text that is printed to the console which contains \<CMD> and then \</CMD> will be parsed and checked for validity.
 
 The problem with using /say for all custom commands is that it creates chat spam. To use them in command blocks, you will want to set the gamerule logAdminCommands to false, and set gamerule sendCommandFeedback to false. Next, you need to embed the custom command in another command which can print an output to the console.
 
@@ -112,7 +112,7 @@ Usage: repeat [count] [command]
 
 This command will repeat the specified command for as many times as specified.
 The string "[i]" will be replaced with the current iteration of the loop (0-indexed).
-There can also be math operations in the command to be run, wrapped in <MATH> and </MATH>. Math operations use javascript math functions, so "sin()" can be used with "Math.sin()".
+There can also be math operations in the command to be run, wrapped in \<MATH> and \</MATH>. Math operations use javascript math functions, so "sin()" can be used with "Math.sin()".
 
 Example:
 
