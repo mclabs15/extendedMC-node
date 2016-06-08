@@ -106,3 +106,16 @@ This command will create a player skull with its SkullOwner tag set to the name 
 Example:
   
         <CMD>phead Steve</CMD>
+
+###repeat
+Usage: repeat [count] [command]
+
+This command will repeat the specified command for as many times as specified.
+The string "[i]" will be replaced with the current iteration of the loop (0-indexed).
+There can also be math operations in the command to be run, wrapped in <MATH> and </MATH>. Math operations use javascript math functions, so "sin()" can be used with "Math.sin()".
+
+Example:
+
+        <CMD>repeat 100 execute @p ~ ~ ~ summon ArmorStand ~<MATH>Math.sin([i]*Math.PI*2/100)*10</MATH> ~ ~<MATH>Math.cos([i]*Math.PI*2/100)*10</MATH> {NoGravity:1,CustomName:ring}</CMD>
+
+The above command will spawn 100 armorstands in a ring around the player with a radius of ~10 blocks.
