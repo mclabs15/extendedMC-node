@@ -29,6 +29,9 @@ entityId = "";
 
 blockNBT = "";
 
+Vars = {};
+
+
 stopServer = function(process) {
 	process.kill('SIGINT');
 }
@@ -133,6 +136,14 @@ case "phead":
 //phead [player]
 console.log("fired");
 sendCommand(prc,"/give "+args[1]+" skull 1 3 {SkullOwner:"+entityName+"}");
+break;
+case "setvar":
+try {
+	Vars[args[1]] = eval(args[2]);
+	}
+catch(e) {
+
+}
 break;
 case "savedata":
 //savedata [X] [y] [z] selector
