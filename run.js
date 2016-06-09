@@ -117,6 +117,7 @@ parseCmd = function(cmd,full) {
 
 var args = cmd.split(" ");
 console.log("CUSTOM: " + cmd);
+cmd = cmd.replace(/\[Q\]/g,'"');
 
 switch(args[0]) {
 case "party":
@@ -378,7 +379,6 @@ break;
 
 
 }
-
 
 
 
