@@ -1,6 +1,9 @@
 # extendedMC-node
 A NodeJS application which parses the console output of a minecraft server and inputs new commands.
 
+##DISCLAIMER:
+USE AT YOUR OWN RISK. Due to the nature of how this program interacts with a Minecraft server, it may be possible for a player on your server to run malicious code through nodeJS on your computer. I am not responsible for any damages caused directly or indirectly by the usage of this program.
+
 ## Setup
 
 This will work with Minecraft version 1.9 and up.
