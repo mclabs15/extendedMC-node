@@ -145,6 +145,30 @@ catch(e) {
 
 }
 break;
+case "buildjsonblock":
+
+sendCommand(prc,"/blockdata "+args[1]+" "+args[2]+" "+args[3]+" {AAAA:'</CMD>',ZZZZ:'<CMD> readjson "+args[4]+"'}");
+
+break;
+case "buildjsonentity":
+
+sendCommand(prc,"/entitydata "+args[1]+" {AAAA:'</CMD>',ZZZZ:'<CMD> readjson "+args[2]+"'}");
+
+break;
+case "readjson":
+
+var newdata = "{" + cmd.slice(cmd.indexOf(",")+1,cmd.indexOf(",AAAA")) + "}";
+console.log(newdata);
+try {
+
+Vars[args[1]] = eval(newdata);
+
+}
+catch(e) {
+
+}
+
+break;
 case "savedata":
 //savedata [X] [y] [z] selector
 sendCommand(prc,"/blockdata "+args[1]+" "+args[2]+" "+args[3]+" {Text1:\"[\\\"\\\",{\\\"text\\\":\\\"<\/CMD>\\\"}]\",Text2:\"[\\\"\\\",{\\\"selector\\\":\\\""+args[4]+"\\\"}]\",Text3:\"[\\\"\\\",{\\\"text\\\":\\\"<CMD>uuid \\\"}]\"}")
