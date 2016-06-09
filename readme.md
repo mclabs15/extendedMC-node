@@ -110,15 +110,60 @@ Example:
   
         <CMD>phead Steve</CMD>
 
+Note: for non-player entities with a CustomName tag, savedata, loaddata, and phead are unnecessary to obtain a skull with that name. Instead, use the buildjsonentity command to create a variable, which can be used with a repeat/give command.
+
 ###repeat
 Usage: repeat [count] [command]
 
 This command will repeat the specified command for as many times as specified.
 The string "[i]" will be replaced with the current iteration of the loop (0-indexed).
-There can also be math operations in the command to be run, wrapped in \<MATH> and \</MATH>. Math operations use javascript math functions, so "sin()" can be used with "Math.sin()".
+There can also be math operations in the command to be run, wrapped in \<MATH> and \</MATH>. Math operations use javascript math functions, so "sin()" can be used with "Math.sin()". Math brackets can be used to return non-math values as well, and can be used with strings and other functions. Math brackets can currently be used in the commands:
+
+* repeat
+* setvar
+* (more soon probably)
 
 Example:
 
         <CMD>repeat 100 execute @p ~ ~ ~ summon ArmorStand ~<MATH>Math.sin([i]*Math.PI*2/100)*10</MATH> ~ ~<MATH>Math.cos([i]*Math.PI*2/100)*10</MATH> {NoGravity:1,CustomName:ring}</CMD>
 
 The above command will spawn 100 armorstands in a ring around the player with a radius of ~10 blocks.
+
+
+###Variables
+
+Variables can be created of any JS data type (int, floating point, string, array, object, etc) with certain commands. These can be modified and used in commands. Variables can be accessed in \<MATH> brackets with "Vars.VARIABLENAME".
+
+###buildjsonentity
+Usage: buildjsonentity [selector] [var]
+
+This command will create a JSON object variable containing the NBT data of an entity selected with [selector]. This variable will be named by the [var] argument.
+
+Example:
+        
+        <CMD>buildjsonentity @e[type=Pig,c=1] pigdata</CMD>
+        //creates a variable called 'pigdata' with the NBT of the nearest pig entity
+
+###buildjsonblock
+Usage: buildjsonblock [x] [y] [z] [var]
+
+Works like buildjsonentity, but saves the tile entity NBT of the specified block coordinates.
+
+###setvar
+Usage: setvar [var] [value]
+
+Sets the value of variable [var] to [value], or creates the variable and assigns the value if it does not exist. \<MATH> brackets can be optionally used in the place of [value].
+
+Examples:
+
+        <CMD>setvar test1 "blah"</CMD> //creates var test1, and gives it the string value "blah".
+        <CMD>setvar count 1</CMD> //creates var count, and gives it the int value 1.
+        <CMD>setvar count <MATH>Math.cos(Vars.count)</MATH></CMD> //sets the variable count to the cosine(rad) of itself.
+
+###Using variables in commands
+
+        <CMD>repeat 1 give PLAYER <MATH>Vars.itemname</MATH></CMD> //gives PLAYER one item with an id equal to the string stored in the variable "itemname".
+
+        <CMD>repeat 1 entitydata @e[type=Pig] <MATH>JSON.stringify(Vars.pigdata).noquotes()</MATH></CMD> //sets all pigs' NBT to the NBT stored in the pigdata variable. The stringify function turns it into a string, and noquotes is a custom function to remove some quotation marks that cause errors.
+
+        <CMD>repeat 1 entitydata @e[type=Pig] {CustomName:<MATH>JSON.stringify(Vars.pigdata.CustomName).noquotes()</MATH>}</CMD> //sets all pigs' NBT to the CustomName tag of the pigdata json variable.
