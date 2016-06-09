@@ -39,7 +39,9 @@ sendCommand = function(process,cmd) {
 	process.stdin.write(cmd + "\n");
 }
 
-
+String.prototype.splice = function(idx, rem, str) {
+    return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
+};
 
 
 
@@ -89,7 +91,7 @@ lines.reverse();
 				var cmd = command.substring(start+5,end);
 
 
-				parseCmd(cmd);
+				parseCmd(cmd,command);
 			}
 
 
@@ -108,7 +110,7 @@ lines.reverse();
 	}
 
 }
-parseCmd = function(cmd) {
+parseCmd = function(cmd,full) {
 
 var args = cmd.split(" ");
 console.log("CUSTOM: " + cmd);
@@ -147,25 +149,107 @@ catch(e) {
 break;
 case "buildjsonblock":
 
-sendCommand(prc,"/blockdata "+args[1]+" "+args[2]+" "+args[3]+" {AAAA:'</CMD>',ZZZZ:'<CMD> readjson "+args[4]+"'}");
+sendCommand(prc,"/blockdata "+args[1]+" "+args[2]+" "+args[3]+" {ZZZZ:'<CMD>readjson "+args[4]+"</CMD>'}");
 
 break;
 case "buildjsonentity":
 
-sendCommand(prc,"/entitydata "+args[1]+" {AAAA:'</CMD>',ZZZZ:'<CMD> readjson "+args[2]+"'}");
+sendCommand(prc,"/entitydata "+args[1]+" {ZZZZ:'<CMD>readjson "+args[2]+"</CMD>'}");
 
 break;
 case "readjson":
-
-var newdata = "{" + cmd.slice(cmd.indexOf(",")+1,cmd.indexOf(",AAAA")) + "}";
+var f2 = full.substring(full.indexOf("{"));
+console.log(f2);
+console.log("");
+for(var i = 200; i > -1; i--) {
+	var regex = new RegExp(i+":", "g");
+	f2 = f2.replace(regex,"");
+}
+//var newdata = "{" + cmd.slice(cmd.indexOf(",")+1,cmd.indexOf(",AAAA")) + "}";
+var newdata = f2;
 console.log(newdata);
 try {
+f2 = f2.replace(/(\s*?{\s*?|\s*?,\s*?)(['"])?([a-zA-Z0-9]+)(['"])?:/g, '$1"$3":');
 
-Vars[args[1]] = eval(newdata);
+
+var divchars = [":",",","[","{","}","]"];
+var numchars = ["0","1","2","3","4","5","6","7","8","9","-"];
+var letterchars = ["f","d","L","s","b","c"];
+var nstart = 1;
+var nend = 1;
+var isnum = 0;
+var innum = 0;
+var quotes = [];
+var qoff = 0;
+for(var i = 0; i < f2.length - 1; i++) {
+var sec = f2.substring(i,i+2);
+
+
+var n0n = 0;
+var n0d = 0;
+var n1n = 0;
+var n1l = 0;
+for(var j = 0; j < letterchars.length; j++) {
+for(var k = 0; k < numchars.length; k++) {
+for(var l = 0; l < divchars.length; l++) {
+if(sec[0] == numchars[k]) {
+n0n = 1;
+}
+if(sec[0] == divchars[l]) {
+n0d = 1;
+}
+if(sec[1] == numchars[k]) {
+n1n = 1;
+}
+if(sec[1] == letterchars[j]) {
+n1l = 1;
+}
 
 }
-catch(e) {
+}
+}
 
+
+if(n0n || n1n) {
+	innum = 1;
+}
+
+if(n0d && n1n) {
+	isnum = 1;
+	nstart = i+1;
+}
+if(n0n && n1l) {
+	isnum = 2;
+	nend = i+2;
+}
+else isnum = 0;
+
+if(isnum == 2 && innum) {
+	quotes.push(nstart);
+	quotes.push(nend);
+	innum = 0;
+}
+
+}
+
+console.log(quotes);
+for(var i = 0; i < quotes.length; i++) {
+	f2 = f2.splice(quotes[i]+qoff,0,'"');
+	qoff++;
+}
+
+
+console.log("");
+console.log("//"+f2+"//");
+//eval('var json = new Object(' + json_string + ')');
+//////////var p = JSON.parse(f2);
+//delete p.ZZZZ;
+Vars[args[1]] = JSON.parse(f2);
+//THE d,f,L,c, ETC SUFFIXES MESS UP THE PARSING
+console.log("success!");
+}
+catch(e) {
+console.log("error: " + e);
 }
 
 break;
