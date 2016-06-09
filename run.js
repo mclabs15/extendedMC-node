@@ -30,7 +30,10 @@ entityId = "";
 blockNBT = "";
 
 Vars = {};
-
+noquotes = new RegExp('"','g');
+String.prototype.noquotes = function() {
+	return this.replace(noquotes,'');
+}
 
 stopServer = function(process) {
 	process.kill('SIGINT');
@@ -141,7 +144,39 @@ sendCommand(prc,"/give "+args[1]+" skull 1 3 {SkullOwner:"+entityName+"}");
 break;
 case "setvar":
 try {
-	Vars[args[1]] = eval(args[2]);
+var cm = cmd.substring(cmd.indexOf(args[2]));
+	while(cm.indexOf("<MATH>") != -1) {
+			mo = {};
+			var ms = "";
+			var mi = cm.indexOf("<MATH>") + 6;
+			if(cm.indexOf("</MATH>")) {
+				ms = cm.substring(mi,cm.indexOf("</MATH>"));
+				ms = ms.replace(/;/g,"");
+				
+				var domath = function(m) {
+					return eval(m);
+				}
+				try{
+					eval('mo.val = domath(ms)');
+				}
+				catch(e) {
+					mo.val = 0;
+				}
+				ms = mo.val;
+				console.log(ms);
+				//cm = cm.slice(mi,cm.indexOf("</MATH>"));
+				cm = cm.slice(0,mi) + cm.slice(cm.indexOf("</MATH>"),cm.length);
+
+				cm = cm.replace("<MATH>",ms);
+				cm = cm.replace("</MATH>","");
+				console.log(cm);
+			}
+			else {
+				cm = cm.replace("<MATH>","");
+			}
+		}
+
+	Vars[args[1]] = eval(cm);
 	}
 catch(e) {
 
@@ -161,10 +196,12 @@ case "readjson":
 var f2 = full.substring(full.indexOf("{"));
 console.log(f2);
 console.log("");
-for(var i = 200; i > -1; i--) {
-	var regex = new RegExp(i+":", "g");
+for(var i = 199; i >= 0; i--) {
+	var regex = new RegExp(i.toString()+":", "g");
 	f2 = f2.replace(regex,"");
 }
+f2 = f2.replace(/<CMD>/g,"");
+f2 = f2.replace(/<\/CMD>/g,"");
 //var newdata = "{" + cmd.slice(cmd.indexOf(",")+1,cmd.indexOf(",AAAA")) + "}";
 var newdata = f2;
 console.log(newdata);
