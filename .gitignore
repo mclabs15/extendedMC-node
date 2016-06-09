@@ -10,3 +10,4 @@ ops.json
 *.properties
 usercache.json
 whitelist.json
+*.log

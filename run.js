@@ -219,13 +219,14 @@ var innum = 0;
 var quotes = [];
 var qoff = 0;
 for(var i = 0; i < f2.length - 1; i++) {
-var sec = f2.substring(i,i+2);
+var sec = f2.substring(i,i+3);
 
 
 var n0n = 0;
 var n0d = 0;
 var n1n = 0;
 var n1l = 0;
+var n2d = 0;
 for(var j = 0; j < letterchars.length; j++) {
 for(var k = 0; k < numchars.length; k++) {
 for(var l = 0; l < divchars.length; l++) {
@@ -241,6 +242,9 @@ n1n = 1;
 if(sec[1] == letterchars[j]) {
 n1l = 1;
 }
+if(sec[2] == divchars[l]) {
+	n2d = 1;
+}
 
 }
 }
@@ -255,7 +259,7 @@ if(n0d && n1n) {
 	isnum = 1;
 	nstart = i+1;
 }
-if(n0n && n1l) {
+if(n0n && n1l && n2d) {
 	isnum = 2;
 	nend = i+2;
 }
